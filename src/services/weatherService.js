@@ -1,21 +1,28 @@
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
-export async function fetchWeather(city) {
+export const fetchWeather = async (city) => {
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+      `${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`
     );
-    if (!response.ok) throw new Error("City not found");
+
+    if (!response.ok) {
+      throw new Error("City not found");
+    }
+
     const data = await response.json();
 
     return {
-      name: data.name,
-      temp: Math.round(data.main.temp),
+      city: data.name,
+      country: data.sys.country,
+      temperature: data.main.temp,
       humidity: data.main.humidity,
-      wind: data.wind.speed,
-      icon: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+      windSpeed: data.wind.speed,
+      description: data.weather[0].description,
+      icon: data.weather[0].icon,
     };
   } catch (error) {
     throw error;
   }
-}
+};

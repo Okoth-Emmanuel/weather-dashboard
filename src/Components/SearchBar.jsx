@@ -1,17 +1,35 @@
-import { FiSearch } from "react-icons/fi";
+import { useState } from "react";
 
-export default function SearchBar({ city, setCity, onKeyDown }) {
+function SearchBar({ onSearch }) {
+  const [input, setInput] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    onSearch(input);
+    setInput("");
+  };
+
   return (
-    <div className="w-full max-w-xl relative mb-8">
-      <input
-        type="text"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        onKeyDown={onKeyDown}
-        placeholder="Search city..."
-        className="w-full p-4 rounded-full text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
-      />
-      <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 cursor-pointer" size={24} />
-    </div>
+    <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleSubmit} className="flex gap-3 mt-4">
+  <input
+    type="text"
+    placeholder="Search city..."
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    className="px-5 py-3 rounded-full outline-none w-72 shadow-md"
+  />
+
+  <button
+    type="submit"
+    className="bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold shadow-md hover:scale-105 transition"
+  >
+    Search
+  </button>
+</form>
+    </form>
   );
 }
+
+export default SearchBar;

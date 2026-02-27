@@ -1,41 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./Components/SearchBar";
 import WeatherCard from "./Components/WeatherCard";
+import ErrorMessage from "./Components/ErrorMessage";
 import { fetchWeather } from "./services/weatherService";
 
 function App() {
-  const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState(null);
+  const [city, setCity] = useState("Juba");
+  const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Handle Enter key press to fetch weather
-  const handleSearch = async (e) => {
-    if (e.key === "Enter" && city.trim() !== "") {
-      try {
-        setError("");
-        const data = await fetchWeather(city);
-        setWeatherData(data);
-      } catch (err) {
-        setWeatherData(null);
-        setError(err.message);
-      }
+  const getWeather = async (cityName) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await fetchWeather(cityName);
+      setWeather(data);
+    } catch (err) {
+      setError(err.message);
+      setWeather(null);
+    } finally {
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    getWeather(city);
+
+    const interval = setInterval(() => {
+      getWeather(city);
+    }, 300000); // refresh every 5 minutes
+
+    return () => clearInterval(interval);
+  }, [city]);
+
   return (
-    <div className="min-h-screen bg-blue-800 flex flex-col items-center justify-center p-6">
-      
-      {/* Search Bar */}
-      <SearchBar city={city} setCity={setCity} onKeyDown={handleSearch} />
+    <div className="min-h-screen bg-gradient-to-br from-sky-500 via-indigo-600 to-purple-700 flex flex-col items-center justify-center p-4">
+      <SearchBar onSearch={setCity} />
 
-      {/* Error Message */}
-      {error && (
-        <div className="text-red-400 mt-4 font-semibold">{error}</div>
-      )}
+      {loading && <p className="text-white mt-4">Loading...</p>}
 
-      {/* Weather Card */}
-      {weatherData && <WeatherCard data={weatherData} />}
+      {error && <ErrorMessage message={error} />}
 
+      {weather && !loading && <WeatherCard weather={weather} />}
     </div>
   );
 }

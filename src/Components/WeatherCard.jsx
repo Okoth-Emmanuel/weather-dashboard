@@ -1,28 +1,43 @@
-export default function WeatherCard({ data }) {
+import { WiHumidity } from "react-icons/wi";
+import { FiWind } from "react-icons/fi";
+
+function WeatherCard({ weather }) {
   return (
-    <div className="bg-blue-700 text-white rounded-2xl p-6 w-full max-w-xl flex flex-col items-center">
+    <div className="bg-white/20 backdrop-blur-lg mt-8 p-8 rounded-3xl shadow-2xl w-96 text-center text-white border border-white/30">
       
-      {/* Icon + Temperature */}
-      <div className="flex items-center gap-4 mb-4">
-        <img src={data.icon} alt="weather icon" className="w-20 h-20" />
-        <div className="text-5xl font-bold">{data.temp}°C</div>
-      </div>
+      <h2 className="text-3xl font-bold mb-2">
+        {weather.city}, {weather.country}
+      </h2>
 
-      {/* City Name */}
-      <div className="text-xl font-medium mb-6">{data.name}</div>
+      <img
+        src={`https://openweathermap.org/img/wn/${weather.icon}@4x.png`}
+        alt="weather icon"
+        className="mx-auto w-28"
+      />
 
-      {/* Details */}
-      <div className="flex justify-around w-full">
-        <div className="flex flex-col items-center">
-          <img src="/wind-icon.svg" alt="wind icon" className="w-6 h-6 mb-1" />
-          <span className="text-sm">{data.wind} km/h</span>
+      <p className="text-5xl font-extrabold mt-2">
+        {Math.round(weather.temperature)}°C
+      </p>
+
+      <p className="capitalize text-lg opacity-90 mb-6">
+        {weather.description}
+      </p>
+
+      <div className="flex justify-between items-center text-sm mt-4">
+        
+        <div className="flex items-center gap-2">
+          <WiHumidity className="text-3xl" />
+          <span>{weather.humidity}%</span>
         </div>
-        <div className="flex flex-col items-center">
-          <img src="/humidity-icon.svg" alt="humidity icon" className="w-6 h-6 mb-1" />
-          <span className="text-sm">{data.humidity}%</span>
-        </div>
-      </div>
 
+        <div className="flex items-center gap-2">
+          <FiWind className="text-xl" />
+          <span>{weather.windSpeed} m/s</span>
+        </div>
+
+      </div>
     </div>
   );
 }
+
+export default WeatherCard;
