@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
+import "./App.css";
 import SearchBar from "./Components/SearchBar";
-import WeatherCard from "./Components/WeatherCard";
-import ErrorMessage from "./Components/ErrorMessage";
 import { fetchWeather } from "./services/weatherService";
 
 function App() {
-  const [city, setCity] = useState("Juba");
   const [weather, setWeather] = useState(null);
+  const [city, setCity] = useState("Juba");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +13,6 @@ function App() {
     try {
       setLoading(true);
       setError("");
-
       const data = await fetchWeather(cityName);
       setWeather(data);
     } catch (err) {
@@ -27,23 +25,57 @@ function App() {
 
   useEffect(() => {
     getWeather(city);
-
-    const interval = setInterval(() => {
-      getWeather(city);
-    }, 300000); // refresh every 5 minutes
-
-    return () => clearInterval(interval);
   }, [city]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-500 via-indigo-600 to-purple-700 flex flex-col items-center justify-center p-4">
+    <div className="app">
       <SearchBar onSearch={setCity} />
 
-      {loading && <p className="text-white mt-4">Loading...</p>}
+      {loading && <p className="loading">Loading...</p>}
+      {error && <p className="error">{error}</p>}
 
-      {error && <ErrorMessage message={error} />}
+      {weather && !loading && (
+        <div className="weather-container">
 
-      {weather && !loading && <WeatherCard weather={weather} />}
+          <div className="weather-main">
+            <img
+              src={`https://openweathermap.org/img/wn/${weather.icon}@4x.png`}
+              alt="weather icon"
+              className="weather-icon"
+            />
+
+            <div className="weather-info">
+              <h1 className="temperature">
+                {Math.round(weather.temperature)}° C
+              </h1>
+              <h2 className="city-name">{weather.city}</h2>
+            </div>
+          </div>
+
+          <div className="weather-stats">
+
+            <div className="stat">
+              <span className="icon">🌬️</span>
+              <div>
+                <p className="stat-value">
+                  {(weather.windSpeed * 3.6).toFixed(1)} km/h
+                </p>
+                <p className="stat-label">Wind Speed</p>
+              </div>
+            </div>
+
+            <div className="stat">
+              <span className="icon">💧</span>
+              <div>
+                <p className="stat-value">{weather.humidity}%</p>
+                <p className="stat-label">Humidity</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      )}
     </div>
   );
 }

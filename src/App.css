@@ -1,42 +1,135 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.app {
+  min-height: 100vh;
+  background-color: #1e4fa3;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 80px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* SEARCH BAR */
+.search-bar {
+  width: 600px;
+  background: white;
+  border-radius: 40px;
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 18px;
+}
+
+.search-bar button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+/* WEATHER SECTION */
+.weather-container {
+  width: 900px;
+  margin-top: 100px;
+}
+
+.weather-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-icon {
+  width: 180px;
+}
+
+.weather-info {
+  text-align: right;
+}
+
+.temperature {
+  font-size: 90px;
+  margin: 0;
+}
+
+.city-name {
+  font-size: 32px;
+  margin-top: 10px;
+}
+
+.weather-stats {
+  display: flex;
+  justify-content: center;
+  gap: 120px;
+  margin-top: 80px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  font-size: 28px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.loading {
+  margin-top: 40px;
+}
+
+.error {
+  margin-top: 40px;
+  color: red;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .search-bar {
+    width: 90%;
   }
-  to {
-    transform: rotate(360deg);
+
+  .weather-container {
+    width: 90%;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .weather-main {
+    flex-direction: column;
+    text-align: center;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .weather-info {
+    text-align: center;
+  }
 
-.read-the-docs {
-  color: #888;
+  .temperature {
+    font-size: 60px;
+  }
+
+  .weather-stats {
+    flex-direction: column;
+    gap: 40px;
+  }
 }
